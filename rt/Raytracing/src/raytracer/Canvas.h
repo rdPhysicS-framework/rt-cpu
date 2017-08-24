@@ -21,6 +21,7 @@ private:
 
 public:
 	Canvas(int w, int h);
+	Canvas(int w, int h, Sampler *sampler);
 	~Canvas();
 
 	inline const RT::Vec2f &GetSizePixels() const { return sizePixels; }

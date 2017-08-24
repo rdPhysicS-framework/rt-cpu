@@ -476,6 +476,7 @@ void Grid::ComputeMeshNormals()
 
 void Grid::ReadPlyFile(char *fileName, const TriangleType type)
 {
+	std::cout << fileName << std::endl;
 	typedef struct Vertex
 	{
 		float x, y, z;

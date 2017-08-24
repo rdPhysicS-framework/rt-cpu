@@ -18,6 +18,21 @@ Canvas::Canvas(int w, int h)
 	sizePixels.y = (wy2 - wy1) / GetHeightImg();
 }
 
+Canvas::Canvas(int w, int h, Sampler *sampler) :
+	sampler(sampler)
+{
+	img = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, 0x000000FF, 0x0000FF00, 0x00FF0000, 0xFF000000);
+
+	float wx1 = -(GetAspect() * 0.5f);
+	float wx2 = -wx1;
+
+	float wy1 = -(10.0f / 2.0f);
+	float wy2 = -wy1;
+
+	sizePixels.x = (wx2 - wx1) / GetWidthImg();
+	sizePixels.y = (wy2 - wy1) / GetHeightImg();
+}
+
 Canvas::~Canvas()
 {
 	SDL_FreeSurface(img);

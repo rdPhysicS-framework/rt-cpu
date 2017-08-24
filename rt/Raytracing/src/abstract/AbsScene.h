@@ -10,6 +10,7 @@ class PointLight;
 class Canvas;
 class AbsLight;
 class Tracer;
+class AbsCamera;
 
 class AbsScene : public Scene
 {
@@ -19,11 +20,15 @@ protected:
 	std::vector<AbsLight*> lights;
 	AbsLight *ambient;
 	Tracer *tracer;
+	Canvas *canvas;
+	AbsCamera *camera;
 
 public:
 	AbsScene(RT::Vec3f &background,
 			 AbsLight *ambient,
-			 Tracer *tracer);
+			 Tracer *tracer,
+			 Canvas *canvas = nullptr,
+			 AbsCamera *camera = nullptr);
 	~AbsScene();
 
 	inline RT::Vec3f GetBackground() { return background; }
@@ -31,15 +36,16 @@ public:
 	inline const std::vector<AbsLight*> &GetLights() const { return lights; }
 	inline AbsLight *GetAmbientLight() const { return ambient; }
 	inline Tracer *GetTracer() const { return tracer; }
+	inline Canvas *GetCanvas() const { return canvas; }
+	inline AbsCamera *GetCamera() const { return camera; }
 
 	virtual void AddObjects(Primitive *object);
 	virtual void AddLights(AbsLight *light);
 
-	virtual Canvas *GetCanvas() const = 0;
 	virtual void Init() = 0;
-	virtual void Render() = 0;
-	virtual inline Result Hit(Ray &ray) = 0;
-	virtual inline bool ShadowHit(Ray &ray, float dist) = 0;
+	virtual void Render();
+	virtual inline Result Hit(Ray &ray);
+	virtual inline bool ShadowHit(Ray &ray, float dist);
 };
 
 #endif //__ABS_SCENE_H__

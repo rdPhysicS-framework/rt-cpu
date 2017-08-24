@@ -829,7 +829,7 @@ PlyFile *ply_open_for_reading(
 		strcat(name, ".ply");
 
 	/* open the file for reading */
-
+	printf("\n%s", name);
 	fp = fopen(name, "r");
 	if (fp == NULL)
 		return (NULL);

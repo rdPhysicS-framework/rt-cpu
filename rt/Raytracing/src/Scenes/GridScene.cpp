@@ -36,32 +36,22 @@ GridScene::GridScene(float zoom, int samples) :
 		/*new AmbientLight(0.2f,
 		RT::Vec3f(1.0f, 1.0f, 1.0f)),*/
 		new AmbientOccluder(RT::Vec3f(1.0f, 1.0f, 1.0f),
-			1.5f, 0.4f,
-			new MultiJittered(samples)),
-		new AreaLighting(3)),
-	camera(new PinholeCamera(RT::Vec3f(6.5f, -1.0f, -2.5f),
-		RT::Vec3f(4.0f, -1.0f, 0.0f),
-		RT::Vec3f(0, 1, 0),
-		8,
-		zoom)),
-	/*camera(new ThinLensCamera(RT::Vec3f(-6.5f, -1.0f, -2.5f),
-	RT::Vec3f(-5.0f, -1.0f, 0.0f),
-	RT::Vec3f(0, 1, 0),
-	12, 6.5f, 0.25f, zoom,
-	new MultiJittered(samples))),*/
-	canvas(new Canvas(1920, 1080)),
+							1.5f, 0.4f,
+							new MultiJittered(samples)),
+		new AreaLighting(3),
+		new Canvas(1920, 1080, new MultiJittered(samples)), 
+		new PinholeCamera(RT::Vec3f(6.5f, -1.0f, -2.5f),
+						  RT::Vec3f(4.0f, -1.0f, 0.0f),
+						  RT::Vec3f(0, 1, 0),
+						  8,
+						  zoom)),
 	grid(new Grid())
 {
-	canvas->SetSampler(
-		new MultiJittered(samples)
-		);
 	Init();
 }
 
 GridScene::~GridScene()
 {
-	delete canvas;
-	delete camera;
 }
 
 void GridScene::CreateScenery()
@@ -198,57 +188,4 @@ void GridScene::Init()
 	i->Scale(2.0f);
 	grid->SetupCells();
 	AddObjects(i);*/
-}
-
-void GridScene::Render()
-{
-	camera->Render(*this);
-	canvas->Save();
-}
-
-Result GridScene::Hit(Ray &ray)
-{
-	Result result(this);
-	RT::Vec3f normal;
-	RT::Vec3f hitPoint;
-
-	float dist = INFINITE;
-	float t = INFINITE;
-
-	for (Primitive *obj : objects)
-	{
-		if (obj->Intersect(ray, t, result))
-		{
-			result.hit = true;
-			result.material = obj->GetMaterial();
-			dist = t;
-			normal = result.normal;
-			hitPoint = result.wHitPoint;
-			/*RT::Vec3f pi = ray.IntersectionPoint(dist);
-			result.lHitPoint = pi;
-			result.wHitPoint = pi;*/
-			//result.normal = obj->GetNormalAt(result.wHitPoint);
-		}
-	}
-
-	if (result.hit)
-	{
-		result.distance = dist;
-		result.normal = normal;
-		result.wHitPoint = hitPoint;
-	}
-	return result;
-}
-
-bool GridScene::ShadowHit(Ray &ray, float dist)
-{
-	Result result(this);
-	float t = INFINITE;
-	for (Primitive *obj : objects)
-	{
-		if (obj->Intersect(ray, t, result) && t < dist)
-			return true;
-	}
-
-	return false;
 }

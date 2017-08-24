@@ -32,25 +32,19 @@ Focus::Focus(float zoom, int samples) :
 			 new AmbientOccluder(RT::Vec3f(1.0f, 1.0f, 1.0f),
 			 					 1.5f, 0.4f,
 			 					 new MultiJittered(samples)),
-			 new AreaLighting()),
-	camera(new ThinLensCamera(RT::Vec3f(-6.5f, -1.0f, -2.5f),
-							  RT::Vec3f(-5.0f, -1.0f, 0.0f),
-							  RT::Vec3f(0, 1, 0),
-							  12, 6.5f, 0.25f, zoom,
-							  new MultiJittered(samples))),
-	canvas(new Canvas(1920, 1080))
+			 new AreaLighting(), 
+			 new Canvas(1920, 1080, new MultiJittered(samples)),
+			 new ThinLensCamera(RT::Vec3f(-6.5f, -1.0f, -2.5f),
+							    RT::Vec3f(-5.0f, -1.0f, 0.0f),
+								RT::Vec3f(0, 1, 0),
+								12, 6.5f, 0.25f, zoom,
+								new MultiJittered(samples)))
 {
-	canvas->SetSampler(
-		new MultiJittered(samples)
-		);
 	Init();
 }
 
 Focus::~Focus()
-{
-	delete canvas;
-	delete camera;
-}
+{}
 
 void Focus::CreateScenery()
 {
@@ -141,42 +135,4 @@ void Focus::Init()
 	CreateObjects();
 }
 
-void Focus::Render()
-{
-	camera->Render(*this);
-	canvas->Save();
-}
 
-Result Focus::Hit(Ray &ray)
-{
-	Result result(this);
-
-	float dist = INFINITE;
-
-	for (Primitive *obj : objects)
-	{
-		if (obj->Intersect(ray, dist, result))
-		{
-			//result.hit = true;
-			result.material = obj->GetMaterial();
-			RT::Vec3f pi = ray.IntersectionPoint(dist);
-			result.lHitPoint = pi;
-			result.wHitPoint = pi;
-			result.normal = obj->GetNormalAt(pi);
-		}
-	}
-	return result;
-}
-
-bool Focus::ShadowHit(Ray &ray, float dist)
-{
-	Result result(this);
-	float t = INFINITE;
-	for (Primitive *obj : objects)
-	{
-		if (obj->Intersect(ray, t, result) && t < dist)
-			return true;
-	}
-
-	return false;
-}

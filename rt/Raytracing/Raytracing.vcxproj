@@ -202,8 +202,6 @@
     <ClCompile Include="src\abstract\Sampler.cpp" />
     <ClCompile Include="src\Scenes\Focus.cpp" />
     <ClCompile Include="src\Scenes\GridScene.cpp" />
-    <ClCompile Include="src\Scenes\PresentationScene.cpp" />
-    <ClCompile Include="src\Scenes\PresentationScene1.cpp" />
     <ClCompile Include="src\Source.cpp" />
     <ClCompile Include="src\Tracer\AreaLighting.cpp" />
     <ClCompile Include="src\Tracer\Raycasting.cpp" />
@@ -272,8 +270,6 @@
     <ClInclude Include="src\abstract\Sampler.h" />
     <ClInclude Include="src\Scenes\Focus.h" />
     <ClInclude Include="src\Scenes\GridScene.h" />
-    <ClInclude Include="src\Scenes\PresentationScene.h" />
-    <ClInclude Include="src\Scenes\PresentationScene1.h" />
     <ClInclude Include="src\Tracer\AreaLighting.h" />
     <ClInclude Include="src\Tracer\Raycasting.h" />
     <ClInclude Include="src\Util\BBox.h" />

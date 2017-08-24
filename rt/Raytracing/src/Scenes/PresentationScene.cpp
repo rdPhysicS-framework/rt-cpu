@@ -234,6 +234,7 @@ Result PresentationScene::Hit(Ray &ray)
 
 	if (result.hit)
 	{
+		result.distance = dist;
 		result.normal = normal;
 		result.wHitPoint = hitPoint;
 	}
